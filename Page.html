@@ -1,0 +1,58 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+</head>
+
+<body>
+  <h2>Rating Form</h2>
+  <form id="feedbackForm" onsubmit="submitForm(event)">
+    <label for="requestId">Request ID:</label>
+    <input type="text" id="requestId" name="requestId" required disabled/><br>
+
+    <label for="rating">Rating:</label>
+    <input type="number" id="rating" name="rating" min="1" max="5" required><br>
+
+    <input type="submit" value="Submit">
+    <div id="successMessage" style="display: none; color: green;">Submission received. Thank you!</div>
+  </form>
+
+  <script>
+    function submitForm(event) {
+        event.preventDefault();
+
+        var formData = {
+          requestId: document.getElementById('requestId').value,
+          rating: document.getElementById('rating').value
+        };
+
+        google.script.run.withSuccessHandler(function(response) {
+          document.getElementById('successMessage').style.display = 'block';
+          document.getElementById('feedbackForm').reset();
+          setTimeout(function() {
+            document.getElementById('successMessage').style.display = 'none';
+          }, 3000); // Hide success message after 3 seconds
+        }).withFailureHandler(function(error) {
+          alert('Error submitting form: ' + error.message);
+        }).doPost(formData);        
+      }
+  </script>
+
+
+<!-- URL Id mapping -->
+  <script>
+    var editId = decodeURIComponent("<?= editId ?>");     
+      function fillforEdit(data){
+      console.log('fill or edit inside')
+      var formData = JSON.parse(data)
+      document.getElementById('requestId').value = formData.id;
+      console.log(formData)     
+   }
+    google.script.run.withSuccessHandler(fillforEdit).getFormEntriesContent(editId? editId: '');
+  </script>
+
+</body>
+</html>
