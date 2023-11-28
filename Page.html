@@ -12,10 +12,14 @@
   <form id="feedbackForm" onsubmit="submitForm(event)">
     <label for="requestId">Request ID:</label>
     <input type="text" id="requestId" name="requestId" required disabled/><br>
-
-    <label for="rating">Rating:</label>
-    <input type="number" id="rating" name="rating" min="1" max="5" required><br>
-
+    
+    <label>Rating:</label>
+      <input type="radio" name="rating" value="1" required> 1
+      <input type="radio" name="rating" value="2" required> 2
+      <input type="radio" name="rating" value="3" required> 3
+      <input type="radio" name="rating" value="4" required> 4
+      <input type="radio" name="rating" value="5" required> 5<br> 
+ <br>
     <input type="submit" value="Submit">
     <div id="successMessage" style="display: none; color: green;">Submission received. Thank you!</div>
   </form>
@@ -26,8 +30,10 @@
 
         var formData = {
           requestId: document.getElementById('requestId').value,
-          rating: document.getElementById('rating').value
+          rating: document.querySelector('input[name="rating"]:checked').value
+          
         };
+        console.log(formData)
 
         google.script.run.withSuccessHandler(function(response) {
           document.getElementById('successMessage').style.display = 'block';
@@ -39,6 +45,7 @@
           alert('Error submitting form: ' + error.message);
         }).doPost(formData);        
       }
+      
   </script>
 
 
